@@ -1,13 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Reduce bundle size
-  experimental: {
-    optimizePackageImports: ['framer-motion'],
-    turbo: {
-      memoryLimit: 512,
-    },
-  },
-  
   // Simple image configuration
   images: {
     remotePatterns: [
@@ -22,9 +14,6 @@ const nextConfig = {
     deviceSizes: [640, 828, 1200],
     imageSizes: [16, 32, 64, 128, 256],
   },
-  
-  // Optimize output
-  output: 'standalone',
   
   // Reduce memory usage
   webpack: (config, { dev, isServer }) => {
