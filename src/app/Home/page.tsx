@@ -57,7 +57,7 @@ export default function Home() {
               GARAGE V28
             </h1>
             <p className="text-lg md:text-xl mb-8 max-w-2xl mx-auto">
-              Chennai's trusted luxury pre-owned car dealership
+              Chennai&apos;s trusted luxury pre-owned car dealership
             </p>
             <div className="flex gap-4 justify-center">
               <a
