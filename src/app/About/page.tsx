@@ -1,15 +1,14 @@
 "use client";
 
-// components/About.tsx
-
 import Image from "next/image";
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
 import { useEffect, useState } from "react";
 import { client } from "../../sanity/lib/client";
-import Head from "next/head";
 
 export default function About() {
+  const [mounted, setMounted] = useState(false);
+
   const timeline = [
     {
       year: "2009",
@@ -44,6 +43,8 @@ export default function About() {
   const [visibleCount, setVisibleCount] = useState(5);
 
   useEffect(() => {
+    setMounted(true);
+
     client
       .fetch(
         `*[_type == "review"] | order(_createdAt desc)[0...20]{
@@ -62,44 +63,24 @@ export default function About() {
     setVisibleCount((prev) => prev + 5);
   };
 
+  if (!mounted) {
+    return null;
+  }
+
   return (
     <>
-      <Head>
-        <title>About Garage V28 | Luxury Car Dealer in Chennai</title>
-        <meta
-          name="description"
-          content="Learn about Garage V28, Chennai's trusted luxury pre-owned car dealership. Our mission, milestones, and customer reviews."
-        />
-        <link rel="canonical" href="https://garagev28.com/About" />
-        <meta
-          property="og:title"
-          content="About Garage V28 | Luxury Car Dealer in Chennai"
-        />
-        <meta
-          property="og:description"
-          content="Learn about Garage V28, Chennai's trusted luxury pre-owned car dealership."
-        />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://garagev28.com/About" />
-        <meta
-          property="og:image"
-          content="https://garagev28.com/images/legacy-bannerimg.jpg"
-        />
-        <meta name="application-name" content="Garage V28" />
-        <link rel="icon" href="/favicon.ico" />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "AboutPage",
-              name: "About Garage V28",
-              description: "Luxury pre-owned car dealer in Chennai.",
-              url: "https://garagev28.com/About",
-            }),
-          }}
-        />
-      </Head>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "AboutPage",
+            name: "About Garage V28",
+            description: "Luxury pre-owned car dealer in Chennai.",
+            url: "https://garagev28.com/About",
+          }),
+        }}
+      />
       <div className="bg-gray-100 text-gray-900">
         <Navbar />
 

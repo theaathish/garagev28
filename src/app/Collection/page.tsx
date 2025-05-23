@@ -1,4 +1,3 @@
-import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import FixNav from "../Components/FixNav";
@@ -7,6 +6,42 @@ import { client } from "../../sanity/lib/client";
 import { urlFor } from "../../sanity/lib/image";
 import SearchBar from "./SearchBarClient";
 import type { CarType } from "../../sanity/schemaTypes/car";
+
+export const metadata = {
+  title: "Browse Used Cars in Chennai | Garage V28",
+  description:
+    "Explore our curated collection of luxury pre-owned cars for sale in Chennai. Find your next car at Garage V28.",
+  keywords:
+    "used cars Chennai, pre-owned cars, luxury cars, car collection, second hand cars Chennai, premium cars",
+  alternates: {
+    canonical: "https://garagev28.com/Collection",
+  },
+  openGraph: {
+    title: "Browse Used Cars in Chennai | Garage V28",
+    description:
+      "Explore our curated collection of luxury pre-owned cars for sale in Chennai.",
+    type: "website",
+    url: "https://garagev28.com/Collection",
+    images: [
+      {
+        url: "https://garagev28.com/images/legacy-bannerimg.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Garage V28 Car Collection",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Browse Used Cars in Chennai",
+    description: "Luxury pre-owned cars collection at Garage V28",
+    images: ["https://garagev28.com/images/legacy-bannerimg.jpg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
 
 function getQueryParams(searchParams: {
   [key: string]: string | string[] | undefined;
@@ -101,40 +136,32 @@ export default async function CollectionPage({
 
   return (
     <>
-      <Head>
-        <title>Browse Used Cars in Chennai | Garage V28</title>
-        <meta
-          name="description"
-          content="Explore our curated collection of luxury pre-owned cars for sale in Chennai. Find your next car at Garage V28."
-        />
-        <link rel="canonical" href="https://garagev28.com/Collection" />
-        <meta
-          property="og:title"
-          content="Browse Used Cars in Chennai | Garage V28"
-        />
-        <meta
-          property="og:description"
-          content="Explore our curated collection of luxury pre-owned cars for sale in Chennai."
-        />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://garagev28.com/Collection" />
-        <meta
-          property="og:image"
-          content="https://garagev28.com/images/legacy-bannerimg.jpg"
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "CollectionPage",
-              name: "Garage V28 Car Collection",
-              description: "Luxury pre-owned cars for sale in Chennai.",
-              url: "https://garagev28.com/Collection",
-            }),
-          }}
-        />
-      </Head>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: "Garage V28 Car Collection",
+            description: "Luxury pre-owned cars for sale in Chennai.",
+            url: "https://garagev28.com/Collection",
+            mainEntity: {
+              "@type": "ItemList",
+              numberOfItems: total,
+              itemListElement: cars.slice(0, 5).map((car, index) => ({
+                "@type": "ListItem",
+                position: index + 1,
+                item: {
+                  "@type": "Product",
+                  name: car.Car_name,
+                  image: car.IMG_front ? urlFor(car.IMG_front).url() : "",
+                  url: `https://garagev28.com/car/${car.slug?.current}`,
+                },
+              })),
+            },
+          }),
+        }}
+      />
       <div className="bg-gray-100 text-gray-900 min-h-screen">
         {/* Navbar */}
         <FixNav />

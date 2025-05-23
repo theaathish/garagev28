@@ -1,17 +1,21 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
 import Image from "next/image";
-import Head from "next/head";
 
 export default function ContactPage() {
+  const [mounted, setMounted] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     message: "",
   });
   const [status, setStatus] = useState("");
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -36,45 +40,25 @@ export default function ContactPage() {
     }
   };
 
+  if (!mounted) {
+    return null;
+  }
+
   return (
     <>
-      <Head>
-        <title>Contact Garage V28 | Luxury Car Dealer Chennai</title>
-        <meta
-          name="description"
-          content="Contact Garage V28 for luxury car sales and support in Chennai. Phone, email, and location details."
-        />
-        <link rel="canonical" href="https://garagev28.com/Contact" />
-        <meta
-          property="og:title"
-          content="Contact Garage V28 | Luxury Car Dealer Chennai"
-        />
-        <meta
-          property="og:description"
-          content="Contact Garage V28 for luxury car sales and support in Chennai."
-        />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://garagev28.com/Contact" />
-        <meta
-          property="og:image"
-          content="https://garagev28.com/images/legacy-bannerimg.jpg"
-        />
-        <meta name="application-name" content="Garage V28" />
-        <link rel="icon" href="/favicon.ico" />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "ContactPage",
-              name: "Contact Garage V28",
-              description:
-                "Contact Garage V28 for luxury car sales and support in Chennai.",
-              url: "https://garagev28.com/Contact",
-            }),
-          }}
-        />
-      </Head>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ContactPage",
+            name: "Contact Garage V28",
+            description:
+              "Contact Garage V28 for luxury car sales and support in Chennai.",
+            url: "https://garagev28.com/Contact",
+          }),
+        }}
+      />
 
       <div className="bg-gray-100 text-gray-900 min-h-screen">
         {/* Navbar */}
