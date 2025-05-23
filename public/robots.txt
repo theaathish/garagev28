@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://garagev28.com
+
+# Sitemaps
+Sitemap: https://garagev28.com/sitemap.xml
