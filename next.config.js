@@ -1,12 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Reduce bundle size
   experimental: {
-    // Disable memory-intensive features
     optimizePackageImports: ['framer-motion'],
+    turbo: {
+      memoryLimit: 512,
+    },
   },
-  // Optimize images
+  
+  // Simple image configuration
   images: {
-    domains: ['cdn.sanity.io'],
     remotePatterns: [
       {
         protocol: 'https',
@@ -15,47 +18,35 @@ const nextConfig = {
         pathname: '/**',
       },
     ],
-    // Reduce image quality to save memory
     formats: ['image/webp'],
-    deviceSizes: [640, 750, 828, 1080, 1200],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    deviceSizes: [640, 828, 1200],
+    imageSizes: [16, 32, 64, 128, 256],
   },
-  // Optimize bundle
-  compiler: {
-    removeConsole: process.env.NODE_ENV === 'production',
-  },
+  
+  // Optimize output
+  output: 'standalone',
+  
   // Reduce memory usage
-  webpack: (config, { isServer }) => {
-    if (!isServer) {
-      config.resolve.fallback = {
-        ...config.resolve.fallback,
-        fs: false,
-      };
-    }
-    
-    // Optimize chunks
-    config.optimization = {
-      ...config.optimization,
-      splitChunks: {
+  webpack: (config, { dev, isServer }) => {
+    // Optimize for production
+    if (!dev && !isServer) {
+      config.optimization.splitChunks = {
         chunks: 'all',
+        minSize: 20000,
+        maxSize: 244000,
         cacheGroups: {
-          default: {
-            minChunks: 1,
-            priority: -20,
-            reuseExistingChunk: true,
-          },
           vendor: {
             test: /[\\/]node_modules[\\/]/,
             name: 'vendors',
-            priority: -10,
             chunks: 'all',
           },
         },
-      },
-    };
+      };
+    }
     
     return config;
   },
+  
   async redirects() {
     return [
       {
