@@ -25,7 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
     );
 
-    const text = await response.text();
+    await response.text(); // Read response but don't store unused variable
     res.status(200).json({ result: "Car details submitted successfully!" });
   } catch (error) {
     console.error("Car submission error:", error);

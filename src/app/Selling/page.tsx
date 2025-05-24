@@ -97,7 +97,7 @@ export default function SellingPage() {
       if (res.ok) {
         setForm({ name: "", contact: "", carName: "" });
       }
-    } catch (error) {
+    } catch {
       setSubmitStatus("Error submitting car details");
     } finally {
       setIsSubmitting(false);
