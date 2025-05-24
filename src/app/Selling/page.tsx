@@ -66,6 +66,43 @@ function ReserveModal({
 
 export default function SellingPage() {
   const [showReserve, setShowReserve] = useState(false);
+  const [form, setForm] = useState({
+    name: "",
+    contact: "",
+    carName: "",
+  });
+  const [submitStatus, setSubmitStatus] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus("Submitting...");
+
+    try {
+      const res = await fetch("/api/submitCar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          contact: form.contact,
+          carName: form.carName,
+          photoUrl: "",
+        }),
+      });
+
+      const result = await res.json();
+      setSubmitStatus(result.result || result.error);
+
+      if (res.ok) {
+        setForm({ name: "", contact: "", carName: "" });
+      }
+    } catch (error) {
+      setSubmitStatus("Error submitting car details");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="bg-gray-100 text-gray-900 min-h-screen">
@@ -84,7 +121,8 @@ export default function SellingPage() {
         />
         <div className="relative z-10 max-w-4xl mx-auto px-6 py-20 text-center flex flex-col items-center">
           <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-4 drop-shadow-lg">
-            Sell Your Car with <span className="text-red-500">Garage V28</span>
+            Sell Your Car with{" "}
+            <span className="text-red-500">Garage V28</span>
           </h1>
           <p className="text-lg md:text-2xl text-white mb-8 max-w-2xl mx-auto drop-shadow">
             Seamless, transparent, and rewarding. Get the best value for your
@@ -166,6 +204,78 @@ export default function SellingPage() {
               Complete the paperwork and receive instant payment securely.
             </p>
           </div>
+        </div>
+      </section>
+
+      {/* Car Submission Form - Add after "How It Works" section */}
+      <section className="max-w-2xl mx-auto mt-20 px-4">
+        <h2 className="text-3xl font-bold text-center mb-8 text-gray-900">
+          Submit Your Car Details
+        </h2>
+        <div className="bg-white rounded-xl shadow-lg p-8">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Your Name *
+              </label>
+              <input
+                type="text"
+                placeholder="Enter your full name"
+                required
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Contact (Mobile/Email) *
+              </label>
+              <input
+                type="text"
+                placeholder="Mobile number or email address"
+                required
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                value={form.contact}
+                onChange={(e) => setForm({ ...form, contact: e.target.value })}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Car Name/Model *
+              </label>
+              <input
+                type="text"
+                placeholder="e.g., Honda City 2020, BMW 3 Series"
+                required
+                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                value={form.carName}
+                onChange={(e) => setForm({ ...form, carName: e.target.value })}
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 disabled:bg-blue-400 transition duration-200"
+            >
+              {isSubmitting ? "Submitting..." : "Submit Car Details"}
+            </button>
+
+            {submitStatus && (
+              <div
+                className={`text-center p-3 rounded ${
+                  submitStatus.includes("Error") || submitStatus.includes("Failed")
+                    ? "bg-red-100 text-red-700"
+                    : "bg-green-100 text-green-700"
+                }`}
+              >
+                {submitStatus}
+              </div>
+            )}
+          </form>
         </div>
       </section>
 

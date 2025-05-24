@@ -63,8 +63,8 @@ export default function Hero() {
             x-webkit-airplay="allow"
           >
             {/* H.264/AAC for iOS, WebM for Android/modern browsers */}
-            <source src="videos/hero.mp4" type="video/mp4" />
-            <source src="videos/hero1.mp4" type="video/mp4" />
+            <source src="video/hero.mp4" type="video/mp4" />
+            <source src="video/hero1.mp4" type="video/mp4" />
             {/* Fallback image for unsupported devices */}
             Sorry, your browser does not support embedded videos.
           </video>
